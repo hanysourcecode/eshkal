@@ -1,0 +1,161 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notokufiarabic.css);
+@import url(https://fonts.googleapis.com/earlyaccess/notonaskharabic.css);
+@import url(https://fonts.googleapis.com/earlyaccess/notonastaliqurdu.css);
+
+@import url(http://fonts.googleapis.com/earlyaccess/amiri.css);
+@import url(http://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css);
+
+@font-face {
+    font-family: 'Vibes';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://raw.githubusercontent.com/bluemix/vibes-typeface/master/Vibes-Regular.ttf) format('truetype');
+}
+
+:root {
+    --pm-button-rounded-size: 100px;
+    --pm-primary-color: green;
+    --pm-secondary-color: yellow;
+    --pm-font-family-primary: 'Noto Naskh Arabic';
+    --pm-font-family-secondary: 'serif';
+    --pm-button-font-size: '80px';
+    --pm-label-font-size: 100px;
+}
+
+* {
+    font-size: 1.1em;
+}
+
+.center {
+  margin: auto;
+  width: 95vw;
+  border: 0vw dotted green;
+  padding: 1vw;
+}
+
+h1.title {
+    direction:rtl;
+    color:#444;
+    font-size: 40pt;
+    font-family: 'Noto Kufi Arabic', serif;
+}
+.kufi {
+    direction:rtl;
+    color:#444;
+    font-family: 'Noto Kufi Arabic', serif;
+}
+textarea.main-text {
+  height: 36vh;
+  font-size: 1.4em;
+}
+.flex-container {
+    display: flex;
+}
+
+/* .flex-container > div {
+    margin: 10vw;
+} */
+
+#toolbox {
+  /* width: 60vw; */
+}
+
+#actionbox {
+  height: 5vh;
+  margin-top: 1vh;
+}
+
+.option-box {
+    float: right;
+    min-width: 18%;
+    background-color: #FFEEFF;
+    border-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-width: 0.1em;
+    /* border-style: solid; */
+    margin: 0.2em;
+    padding: 0.2em;
+    font-size: 0.9em;
+}
+
+#option-font {
+  font-size: small;
+}
+
+.view-area {
+  height: 38vh;
+}
+
+#out-text-container {
+  border-color: red;
+  border-width: 0.1em;
+  padding: 0.2em;
+}
+
+#out-canvas-container {
+  border-color: red;
+  border-width: 2px;
+  border-style: dashed;
+  padding: 3px;
+  /* width: 71vw; */
+  /* width: 53vw; */
+  max-width: 910px;
+  /* max-height: 455px; */
+}
+
+#out-canvas {
+  max-width: 900px;
+  /* max-height: 450px; */
+  /* width: 70vw; */
+  /* max-height: 30vmin; */
+  /* max-width: 30vmin; */
+  /* width: 54vw; */
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+    font-size: 3em;
+  }
+  
+  /* Show the snackbar when clicking on a button (class added with JavaScript) */
+  #snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  /* Animations to fade the snackbar in and out */
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+ 

@@ -2,115 +2,145 @@
     <head>
         <title>إشكال</title>
         <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/plume-css@1.0.5/lib/plume-all.min.css'>
+        <link rel="stylesheet" href="eshkal.css" />
 
-        <style>
-            @import url(https://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
-
-            :root {
-                --pm-button-rounded-size: 150px;
-                --pm-primary-color: green;
-                --pm-secondary-color: yellow;
-                --pm-font-family-primary: 'Droid Arabic Kufi';
-                --pm-font-family-secondary: 'serif';
-                --pm-button-font-size: '300px'
-            }
-
-
-            h1.title {
-                direction:rtl;
-                color:#444;
-                font-size: 40pt;
-                font-family: 'Droid Arabic Kufi', serif;
-            }
-            .kufi {
-                direction:rtl;
-                color:#444;
-                font-family: 'Droid Arabic Kufi', serif;
-            }
-            textarea.main-text {
-                height: 50%;
-                font-size: 30;
-            }
-            .flex-container {
-                display: flex;
-            }
-
-            button.action {
-                /* font-size: 100px; */
-                width: 300px;
-                height: 300px;
-            }
-
-            .flex-container {
-                display: flex;
-            }
-
-            .flex-container > div {
-                margin: 10px;
-            }
-        </style>
+        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+        <link rel="manifest" href="site.webmanifest">
 
     </head>
-    <body onload="init()" class="plume kufi">
+
+    <body onload="init()" class="plume kufi" dir="rtl" style="direction: rtl;">
 
 
-        <div class="flex-container pm-container" style="height: 90%;">
-            <div style="flex-grow: 1">
-                <h1 id='title' class='title'>إشڴاڵ</h1>
 
-                <div>
-                    <button id="apply" class="pm-btn-round pm-btn-primary action" onclick="apply()">إشكال</button>
+        <div class="center" style="max-width: 920px; flex-direction: column;">
+
+            <div>
+                <div style="margin: 8px;">
+                    <div class="pm-btn-round pm-btn-primary center">إشكال</div>
                 </div>
-
-                <div>
-                    <div title="استبدال الحروف الأصلية للكلمة بحروف شبيهة">
-                        <input type="checkbox" class="option" id="option-similar" /> تمويه
-                    </div>
-                    <div title="إخفاء نقاط الحروف">
-                        <input type="checkbox" class="option" id="option-nodots" checked="checked" /> لا نقاط
-                    </div>
-                    <div title="إضافة بعض الحروف الإنجليزية بدلاً من الحروف العربية">
-                        <input type="checkbox" class="option" id="option-english" /> فرنكة
-                    </div>
-                    <div title="إضافة تشكيل عشوائي للكلمة">
-                        <input type="checkbox" class="option" id="option-tashkeel" /> تشكيل
-                    </div>
-                    <div title="إضافة فواصل عشوائية بين أحرف الكلمة">
-                        <input type="checkbox" class="option" id="option-fasel" /> فواصل
-                    </div>
+                <div style="font-size: 0.5em">
+                    إشكال تساعدك على جعل كلماتك العربية أكثر غموضاً
+                    <br />
+                    الأداة بدائية وليست مضمونة في جعل كلماتك مستعصية على القراءة الآلية للنصوص ولكنها تزيد من صعوبة الأمر وقد تساعد على الإشكال في الفهم للآلة مع الحفاظ قدر الإمكان في الوضوح للبشر
+                    <br />
+                    الآداة غير متصلة بسيرفر - تعمل بالكامل من على جهازك - لاتحفظ أي من بياناتك او ماتكتب
+                    <br />
+                    <a href="https://github.com/hanysourcecode/eshkal">source code</a>
                 </div>
-
-                <hr />
-                <div>
-                    <div style="width: 170px; font-size: 14px;">
-                        إشكال تساعدك على جعل كلماتك العربية أكثر غموضاً
-                        <br />
-                        الأداة بدائية وليست مضمونة في جعل كلماتك مستعصية على القراءة الآلية للنصوص ولكنها تزيد من صعوبة الأمر وقد تساعد على الإشكال في الفهم للآلة مع الحفاظ قدر الإمكان في الوضوح للبشر
-                        <br />
-                        يتم تجاهل الكلمات المكونة من ثلاثة حروف فأقل والكلامات البادئة بعلامة #
-                    </div>
-                </div>
-
             </div>
-            
-            <div style="flex-grow: 11" >
 
-                <div>
-                    <textarea id='in' class="main-text"></textarea>
+            <div class="view-area">
+                <textarea id='in' class="main-text">تؤكد العديد من الشواهد الأثرية الأصول العربية للحياة في القدس، الأمر الذي يكشف بطلان الزعم الذي يتم ترويجه بأن بني إسرائيل لهم صلة بالقدس أو نشأتها، فقد تم تأسيسها على يد اليبوسيين العرب، قبل وجود بني إسرائيل العابر والطارئ بها بما يقارب 30 قرنًا من الزمان.
+#المسجد_الأقصى</textarea>
+            </div>
+
+
+            <div id="toolbox" class="flex-container" style="display: flex; flex-direction: column;">
+
+
+                <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                    <label class="option-box">
+                        <input type="radio" class="option" id="option-out" name="option-out" checked="" value="text">
+                        نص
+                    </label>
+                    <label class="option-box">
+                        <input type="radio" class="option" id="option-out" name="option-out" value="image">
+                        صورة
+                    </label>
+                </div>
+
+                <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+
+                    <label class="option-box" title="استبدال الحروف الأصلية للكلمة بحروف شبيهة">
+                        <input type="checkbox" class="option" id="option-similar" name="option-similar" />
+                        تمويه
+                    </label>
+                    <label class="option-box" title="إخفاء نقاط الحروف">
+                        <input type="checkbox" class="option" id="option-nodots" name="option-nodots" />
+                        لا نقاط
+                    </label>
+                    <label class="option-box" title="إضافة بعض الحروف الإنجليزية بدلاً من الحروف العربية">
+                        <input type="checkbox" class="option" id="option-english" name="option-english" />
+                        فرنكة
+                    </label>
+                    <label class="option-box" title="إضافة تشكيل عشوائي للكلمة">
+                        <input type="checkbox" class="option" id="option-tashkeel" name="option-tashkeel" />
+                        تشكيل
+                    </label>
+                    <label class="option-box" title="إضافة فواصل عشوائية بين أحرف الكلمة">
+                        <input type="checkbox" class="option" id="option-fasel" name="option-fasel" />
+                        فواصل
+                    </label>
+
+                </div>
+                <div style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+
+                    <label class="option-box option-image" title="الحجم">
+                        <select id="option-image-size" class="option">
+                            <option value="1200x630">لوحة أفقية</option>
+                            <option value="900x1200">عمود</option>
+                            <option value="1200x1200">مربع</option>
+                            <option value="1200x400">عريض</option>
+                        </select>
+                    </label>
+                
+                    <label class="option-box option-image" title="اللون">
+                        <input class="option" type="color" id="option-bgcolor" value="#ee2222" />
+                    </label>
+
+                    <label class="option-box option-image" title="الخط">
+                        <select id="option-font" class="option">
+                            <option value="Amiri" style="font-family: 'Amiri';">أميري</option>
+                            <option value="Droid Arabic Naskh" style="font-family: 'Droid Arabic Naskh';">نسخ</option>
+                            <option value="Noto Kufi Arabic" style="font-family: 'Noto Kufi Arabic';" selected="selected">كوفي</option>
+                            <option value="Noto Nastaliq Urdu" style="font-family: 'Noto Nastaliq Urdu';">نستعليق</option>
+                            <option value="Vibes" style="font-family: 'Vibes';">ملخبط</option>
+                        </select>
+                    </label>
+
+                    <label class="option-box option-image" title="إضافة علامات عشوائية على الكلمات">
+                        <input type="checkbox" class="option" id="option-distortion" name="option-distortion" />
+                        تشويه
+                    </label>
+
+                    <input type="hidden" id="option-fontsize" value="140" />
+
                 </div>
                 
-                <div>
+            </div>
+
+        
+
+            <div id="actionbox">
+                <button id="apply" class="pm-btn-primary" onclick="apply()">إشكال</button>
+                <button id="apply" class="pm-btn-primary" onclick="copyToClipBoard()">نسخ</button>
+            </div>
+            
+            <div id="view-area">
+                <div id="out-text-container">
                     <textarea id='out' class="main-text" readonly='true'></textarea>
                 </div>
-
-                <div style="margin-top: 12px;">
-                    <button id="copy" onclick="copyToClipBoard()">نسخ للحافظة</button>
+    
+                <div id="out-canvas-container" class="center">
+                    <canvas id='out-canvas' class="main-canvas" width="1200" height="630"></canvas>
                 </div>
-
             </div>
+
+            <div style="">
+                <div style="font-size: 0.5em">
+                    يتم تجاهل الكلمات البادئة بعلامة #
+                </div>
+            </div>
+
         </div>
         
         <script src="eshkal.js"></script>
+        <div id="snackbar">...</div>
+
     </body>
+
     
 </html>
