@@ -13,8 +13,6 @@
 
     <body onload="init()" class="plume kufi" dir="rtl" style="direction: rtl;">
 
-
-
         <div class="center" style="max-width: 920px; flex-direction: column;">
 
             <div>
@@ -33,8 +31,9 @@
             </div>
 
             <div class="view-area">
-                <textarea id='in' class="main-text">تؤكد العديد من الشواهد الأثرية الأصول العربية للحياة في القدس، الأمر الذي يكشف بطلان الزعم الذي يتم ترويجه بأن بني إسرائيل لهم صلة بالقدس أو نشأتها، فقد تم تأسيسها على يد اليبوسيين العرب، قبل وجود بني إسرائيل العابر والطارئ بها بما يقارب 30 قرنًا من الزمان.
-#المسجد_الأقصى</textarea>
+                <textarea id='in' class="main-text"></textarea>
+                <!-- <textarea id='in' class="main-text">تؤكد العديد من الشواهد الأثرية الأصول العربية للحياة في القدس، الأمر الذي يكشف بطلان الزعم الذي يتم ترويجه بأن بني إسرائيل لهم صلة بالقدس أو نشأتها، فقد تم تأسيسها على يد اليبوسيين العرب، قبل وجود بني إسرائيل العابر والطارئ بها بما يقارب 30 قرنًا من الزمان.
+#المسجد_الأقصى</textarea> -->
             </div>
 
 
@@ -80,7 +79,7 @@
 
                     <label class="option-box option-image" title="الحجم">
                         <select id="option-image-size" class="option">
-                            <option value="1200x630">لوحة أفقية</option>
+                            <option value="1200x630">لوحة</option>
                             <option value="900x1200">عمود</option>
                             <option value="1200x1200">مربع</option>
                             <option value="1200x400">عريض</option>
@@ -97,7 +96,11 @@
                             <option value="Droid Arabic Naskh" style="font-family: 'Droid Arabic Naskh';">نسخ</option>
                             <option value="Noto Kufi Arabic" style="font-family: 'Noto Kufi Arabic';" selected="selected">كوفي</option>
                             <option value="Noto Nastaliq Urdu" style="font-family: 'Noto Nastaliq Urdu';">نستعليق</option>
-                            <option value="Vibes" style="font-family: 'Vibes';">ملخبط</option>
+                            <option value="Vibes" style="font-family: 'Vibes';">طفولي</option>
+                            <option value="Lalezar" style="font-family: 'Lalezar';">واضح</option>
+                            <option value="Handjet" style="font-family: 'Handjet';">مبكسل</option>
+                            <option value="Alkalami" style="font-family: 'Alkalami';">مزخرف</option>
+                            <option value="Blaka" style="font-family: 'Blaka';">شديد</option>
                         </select>
                     </label>
 
@@ -106,7 +109,12 @@
                         تشويه
                     </label>
 
-                    <input type="hidden" id="option-fontsize" value="140" />
+                    <label class="option-box option-image" title="">
+                        <input type="checkbox" class="option" id="option-alpha" name="option-alpha" />
+                        تعتيم
+                    </label>
+
+                    <input type="hidden" id="option-fontsize" value="180" />
 
                 </div>
                 
@@ -115,8 +123,9 @@
         
 
             <div id="actionbox">
-                <button id="apply" class="pm-btn-primary" onclick="apply()">إشكال</button>
-                <button id="apply" class="pm-btn-primary" onclick="copyToClipBoard()">نسخ</button>
+                <button id="action-apply" class="pm-btn-primary" onclick="apply()">إشكال</button>
+                <button id="action-copy" class="pm-btn-primary" onclick="copyToClipBoard()">نسخ</button>
+                <a id="action-download-image" class="pm-btn-primary action-image" download="eshkal-image.png" onclick="this.href = downloadCanvas()">تنزيل</a>
             </div>
             
             <div id="view-area">

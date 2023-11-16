@@ -1,9 +1,12 @@
+
 @import url(https://fonts.googleapis.com/earlyaccess/notokufiarabic.css);
 @import url(https://fonts.googleapis.com/earlyaccess/notonaskharabic.css);
 @import url(https://fonts.googleapis.com/earlyaccess/notonastaliqurdu.css);
-
 @import url(http://fonts.googleapis.com/earlyaccess/amiri.css);
 @import url(http://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css);
+@import url(http://fonts.googleapis.com/earlyaccess/handjet.css);
+@import url('https://fonts.googleapis.com/css2?family=Alkalami&family=Blaka&family=Handjet:wght@500&family=Lalezar&display=swap');
+
 
 @font-face {
     font-family: 'Vibes';

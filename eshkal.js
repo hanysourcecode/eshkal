@@ -7,6 +7,8 @@ const rootShapeLetterMap = new Map();
 const similarLettersMap = new Map();
 const arabicToEnglishMap = new Map();
 const distortionLetters = ['ا', 'ل', 'ر', 'م', 'و', 'ء', '(', ')', '{', '}', '-', '_', '*', '^', '~', '`', ':', '\'', '/', '\\', '=', '+', '@', '#', ',', '', ''];
+//const distortionLetters = ['ا', '/', '\\'];
+// const distortionLetters = ['_'];
 
 let options = {
     normalized: true,
@@ -38,13 +40,15 @@ const copyElement = document.getElementById("copy");
 const canvas = document.getElementById('out-canvas');
 const canvasContainer = document.getElementById('out-canvas-container');
 const drawOptionsElements = document.getElementsByClassName('option-image');
+const drawActionsElements = document.getElementsByClassName('action-image');
 
 var debug = false;
+var canvasDebug = false;
 
 
 function init() {
 
-    debug = localStorage.getItem("debug") === 'y';
+    readDebugInfo();
 
     initRootShapeLetterMap();
     initSimilarLettersMap();
@@ -154,6 +158,11 @@ function init() {
     }
 }
 
+function readDebugInfo() {
+    debug = localStorage.getItem("debug") === 'y';
+    canvasDebug = localStorage.getItem("canvas-debug") === 'y';
+}
+
 function readOption(option) {
     return document.getElementById(option).checked;
 }
@@ -202,15 +211,17 @@ function readOptions() {
         fontsize: readOptionValue('option-fontsize'),
         bgcolor: readOptionValue('option-bgcolor'),
         imageSize: readOptionValue('option-image-size'),
+        imageAlpha: readOption('option-alpha'),
         additionalTopMargin: 0
     }
 }
 
 function apply(e) {
-    console.log('apply', e);
+    readDebugInfo();
+    debug && console.log('apply', e);
     options = readOptions();
-    console.log('option-out', options.outputType, document.querySelector('input[name="option-out"]:checked').value);
-    console.log('apply options', options);
+    debug && console.log('option-out', options.outputType, document.querySelector('input[name="option-out"]:checked').value);
+    debug && console.log('apply options', options);
     applyViewChanges(options);
     const inputValue = inputElement.value;
     finalOutputText = convertText(inputValue);
@@ -221,11 +232,10 @@ function apply(e) {
 }
 
 function drawCanvas() {
-    console.log('canvas', canvas);
+    debug && console.log('canvas', canvas);
     var ctx = canvas.getContext("2d");
     ctx.direction = "rtl";
-    // ctx.filter = "blur(2 px)";
-    // ctx.globalAlpha = 0.5;
+    
     // canvas.width = canvas.parentElement.width;
     // canvas.height = canvas.parentElement.height;
 
@@ -244,77 +254,119 @@ function drawCanvas() {
 
     bottomSpace = canvas.height - textHeight;
     options.additionalTopMargin = bottomSpace / 2;
-    console.log("remeasure spacing", canvas.height, textHeight, bottomSpace, ctx.additionalTopMargin);
+    debug && console.log("vertical alignment", canvas.height, textHeight, bottomSpace, ctx.additionalTopMargin);
     options.drawEnabled = true;
     tryDrawWithFont(canvas, ctx, fontSize);
-
-    // ctx.rotate((45 * Math.PI) / 180);
-    // ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 function tryDrawWithFont(canvas, ctx, fontSize) {
+    initDraw(canvas, ctx, fontSize);
+
+    if (options.imageAlpha) {
+        ctx.filter = "blur(2px)";
+        // ctx.globalAlpha = 0.5;
+    }
+
+    var x = canvas.width - options.hmargin / 2;
+    var y = options.vmargin + options.additionalTopMargin;
+    debug && console.log("draw init", x, y, options);
     var lines = finalOutputText.split('\n');
-    // console.log(lines);
-    
-    var lineHeight = fontSize * 1.5;
-    var margin = 140;
-    
-    ctx.font = fontSize + "px " + options.font;
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = options.bgcolor;
-    options.drawEnabled && ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    options.drawEnabled && (ctx.fillStyle = isDarkColor(options.bgcolor) ? 'white' : 'black');
-
-
-    debug && console.log('draw context', ctx);
-    debug && console.log('font', ctx.font);
-    
-    var writingAreaWidth = canvas.width - margin;
-    var x = canvas.width - margin / 2;
-    var y = lineHeight + options.additionalTopMargin;
-    console.log("draw init", x, y, options);
-
     var lineIndex = 0;
     for (var i = 0; i<lines.length; i++) {
         let line = lines[i];
         debug && console.log('line measure', ctx.measureText(line));
-        while (ctx.measureText(line).width > writingAreaWidth) {
-            let breakIndex = findBreakIndex(line, writingAreaWidth, ctx);
+        while (ctx.measureText(line).width > options.writingAreaWidth) {
+            let breakIndex = findBreakIndex(line, options.writingAreaWidth, ctx);
             debug && console.log('breakIndex', breakIndex);
             if (breakIndex == -1) {
                 debug && console.log('breakIndex WARN', breakIndex);
                 breakIndex = 50;
             }
             let printedLine = line.substring(0, breakIndex);
-            if (options.drawEnabled) {
-                ctx.fillText(printedLine, x, y + (lineIndex * lineHeight) );
-                if (options.distortion) {
-                    for(d=0; d<canvas.width; d+=canvas.width/7) {
-                        ctx.fillText(randomFrom(distortionLetters), d - random(canvas.width/7), y + (lineIndex * lineHeight) );
-                    }
-                }
-            }
+            drawLine(printedLine, x, y, lineIndex, ctx);
             lineIndex++;
-            debug && console.log('PRINT-L1', printedLine, x, y);
             line = line.substring(breakIndex + 1);
         }
-        if (options.drawEnabled) {
-            options.drawEnabled && ctx.fillText(line, x, y + (lineIndex * lineHeight) );
-            if (options.distortion) {
-                ctx.fillText(randomFrom(distortionLetters), canvas.width - random(canvas.width/5), y + (lineIndex * lineHeight) );
-            }
-        }
+        drawLine(line, x, y, lineIndex, ctx);
         
         lineIndex++
-        debug && console.log('PRINT-L2', line);
     }
     lineIndex--;
-    const textHeight = lineIndex * lineHeight + 2 * lineHeight;
+    const textHeight = lineIndex * options.lineHeight + 2 * options.vmargin;
     debug && console.log('Text fitting check', textHeight, canvas.height);
 
     return textHeight;
+}
+
+function initDraw(canvas, ctx, fontSize) {
+    options.lineHeight = fontSize * 1.5;
+    options.hmargin = options.lineHeight;
+    options.vmargin = options.lineHeight;
+    
+    ctx.font = fontSize + "px " + options.font;
+
+    ctx.fillStyle = options.bgcolor;
+    options.drawEnabled && ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    options.drawEnabled && (options.textColor = isDarkColor(options.bgcolor) ? 'white' : 'black');
+
+    debug && console.log('draw context', ctx);
+    debug && console.log('font', ctx.font);
+    
+    options.writingAreaWidth = canvas.width - options.hmargin;
+}
+
+function drawLine(line, x, y, lineIndex, ctx) {
+    if (options.drawEnabled) {
+
+        let lineX = x;
+        let lineY = y + (lineIndex * options.lineHeight);
+
+        debug && console.log('draw line text', lineIndex, lineX, lineY, line);
+        ctx.fillStyle = options.textColor;
+        ctx.fillText(line, lineX, lineY);
+        if (options.distortion) {
+            lineWidth = ctx.measureText(line).width;
+            
+            from = lineX - lineWidth;
+            to = from + lineWidth;
+            part = canvas.width / 10;
+            
+            if (canvasDebug) {
+                ctx.beginPath();
+                ctx.lineWidth = "2";
+                ctx.strokeStyle = '#FFFF00';
+                ctx.setLineDash([6]);
+                ctx.rect(from, lineY - options.lineHeight * 2 / 3, lineWidth, options.lineHeight - 4);
+                ctx.stroke();
+
+                ctx.fillStyle = '#FFFF00';
+                ctx.fillText('x', from, lineY);
+                ctx.fillText('y', to, lineY);
+            }
+
+            debug && console.log('draw line distortion', lineIndex, from, to, lineY);
+            if (canvasDebug) {
+                
+            }
+            for(d = from; d < to - part; d += part) {
+                dx = d + random(part);
+                ctx.fillStyle = options.textColor;
+                ctx.fillText(randomFrom(distortionLetters), dx, lineY);
+
+                if (canvasDebug) {
+                    ctx.fillStyle = "#00FF00";
+                    ctx.fillText('_', dx, lineY);
+                    // ctx.beginPath();
+                    // ctx.lineWidth = "2";
+                    // ctx.strokeStyle = "#00FF00";
+                    // ctx.rect(dx - 10, lineY - options.lineHeight * 2 / 3 + 10, 10, options.lineHeight - 24);
+                    // ctx.stroke();
+                }
+
+            }
+        }
+    }
 }
 
 function findBreakIndex(line, maxWidth, ctx) {
@@ -350,20 +402,19 @@ function applyViewChanges(options) {
         canvas.width = dim[0];
         canvas.height = dim[1];
 
-        console.log('image size', canvas.width, canvas.height);
+        debug && console.log('image size', canvas.width, canvas.height);
 
-        for (let i = 0; i < drawOptionsElements.length; i++) {
-            drawOptionsElements[i].style.display = 'block';
-        }
+        [].forEach.call(drawOptionsElements, e => e.style.display = 'block');
+        [].forEach.call(drawActionsElements, e => e.style.visibility = 'visible');
+
         outputElement.style.display = 'none';
 
         document.getElementById('option-font').style.font = options.font;
 
     } else {
         canvasContainer.style.display = 'none';
-        for (let i = 0; i < drawOptionsElements.length; i++) {
-            drawOptionsElements[i].style.display = 'none';
-        }
+        [].forEach.call(drawOptionsElements, e => e.style.display = 'none');
+        [].forEach.call(drawActionsElements, e => e.style.visibility = 'hidden');
         outputElement.style.display = 'block';
     }
 }
@@ -477,8 +528,10 @@ function copyToClipBoard() {
     }
 }
 
-function changeButtonLabel(element, text){
-    element.innerText = text;
+function downloadCanvas() {
+    var image = canvas.toDataURL("image/png").replace(/^data:image\/[^;]*/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=eshkal-image.png');
+    return image;
+    // window.location.href=image;
 }
 
 function toast(message) {
